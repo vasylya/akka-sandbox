@@ -3,13 +3,13 @@
 function cloneRepo {
     echo "Cloning repo"
     rm -rf akka-sandbox
-    git clone https://github.com/softwaremill/akka-sandbox
+    git clone https://github.com/vasylya/akka-sandbox.git
 }
 
 function runApp {
     echo "Compiling repo (this may take some time, first time)"
     cd akka-sandbox
-    git checkout part3
+    git checkout master
     sbt assembly
 
 #    echo "Downloading aspectjweaver"
