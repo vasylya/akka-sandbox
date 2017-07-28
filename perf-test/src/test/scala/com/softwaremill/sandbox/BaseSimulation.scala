@@ -11,8 +11,10 @@ class BaseSimulation extends Simulation {
 
   val httpConf: HttpProtocolBuilder = createHttpConf(localhostURL)
 
-  val host1HttpConf: HttpProtocolBuilder = createHttpConf("http://192.168.69.100:9000")
-  val host2HttpConf: HttpProtocolBuilder = createHttpConf("http://192.168.69.101:9000")
+//  val host1HttpConf: HttpProtocolBuilder = createHttpConf("http://192.168.69.100:9000")
+//  val host2HttpConf: HttpProtocolBuilder = createHttpConf("http://192.168.69.101:9000")
+  val host1HttpConf: HttpProtocolBuilder = createHttpConf("http://127.0.0.1:9001")
+  val host2HttpConf: HttpProtocolBuilder = createHttpConf("http://127.0.0.1:9002")
 
   private def createHttpConf(baseUrl: String) =
     http

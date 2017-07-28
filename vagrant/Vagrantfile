@@ -11,6 +11,7 @@ Vagrant.configure("2") do |config|
     sandbox_host_1.vm.hostname = 'sandbox-host-1'
     sandbox_host_1.vm.box = "ubuntu/xenial64"
     sandbox_host_1.vm.network :private_network, ip: "192.168.69.100"
+    sandbox_host_1.vm.network :forwarded_port, guest: 9000, host: 9001, guest_ip: "192.168.69.100", host_ip: "127.0.0.1"
     sandbox_host_1.vm.provider "virtualbox" do |vb|
       # Customize the amount of memory on the VM:
       vb.memory = "1512"
@@ -31,6 +32,7 @@ Vagrant.configure("2") do |config|
     sandbox_host_2.vm.hostname = 'sandbox-host-2'
     sandbox_host_2.vm.box = "ubuntu/xenial64"
     sandbox_host_2.vm.network :private_network, ip: "192.168.69.101"
+    sandbox_host_2.vm.network :forwarded_port, guest: 9000, host: 9002, guest_ip: "192.168.69.101", host_ip: "127.0.0.1"
     sandbox_host_2.vm.provider "virtualbox" do |vb|
       # Customize the amount of memory on the VM:
       vb.memory = "1512"
