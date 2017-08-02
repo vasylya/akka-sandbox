@@ -23,9 +23,9 @@ class UserController(userService: UserService)(implicit executionContext: Execut
           onSuccess(userService.createUser(uuid)) {
             case name: String =>
               logger.debug(s"creating user $uuid finished [token ${Tracer.currentContext.token}]")
-              Tracer.withNewContext("creating_user_autoFinish", autoFinish = true) {
-                complete(201, s"user $uuid created")
-              }
+              complete(201, s"user $uuid created")
+//              Tracer.withNewContext("creating_user_autoFinish", autoFinish = true) {
+//              }
           }
         }
       }
@@ -33,15 +33,16 @@ class UserController(userService: UserService)(implicit executionContext: Execut
       pathPrefix(JavaUUID) { uuid =>
         pathEnd {
           get {
-            traceName("get-user") {
+            //traceName("get-user")
+            {
               onSuccess(userService.getUser(uuid)) {
                 case Some(userName) =>
-                  Tracer.withNewContext("get-user_with_autoFinish", autoFinish = true) {
-                    logger.debug(s"getting user $uuid finished [token ${Tracer.currentContext.token}]")
-                    Tracer.withNewContext("get-user_without_autoFinish") {
-                      complete(200, s"user $uuid found, name is: $userName")
-                    }
-                  }
+                  logger.debug(s"getting user $uuid finished [token ${Tracer.currentContext.token}]")
+                  complete(200, s"user $uuid found, name is: $userName")
+//                  Tracer.withNewContext("get-user_with_autoFinish", autoFinish = true) {
+//                    Tracer.withNewContext("get-user_without_autoFinish") {
+//                    }
+//                  }
                 case None =>
                   logger.debug(s"user $uuid not found [token ${Tracer.currentContext.token}]")
                   complete(404, s"user $uuid not found")

@@ -49,15 +49,15 @@ class UserActor(userActorConfig: UserActorConfig) extends PersistentActor with D
   }
 
   private def postCreationProcessing = {
-    val segment = Tracer.currentContext.startSegment("post-creation-processing", "business-logic", "xyz")
-//    Thread.sleep(random.nextInt(500))
-    segment.finish()
+//    val segment = Tracer.currentContext.startSegment("post-creation-processing", "business-logic", "xyz")
+////    Thread.sleep(random.nextInt(500))
+//    segment.finish()
   }
 
   private def validationLogic = {
-    val segment = Tracer.currentContext.startSegment("external-validation-service", "validation-logic", "xyz")
-//    Thread.sleep(random.nextInt(userActorConfig.userCreationLag))
-    segment.finish()
+//    val segment = Tracer.currentContext.startSegment("external-validation-service", "validation-logic", "xyz")
+////    Thread.sleep(random.nextInt(userActorConfig.userCreationLag))
+//    segment.finish()
   }
 
   override def mdc(currentMessage: Any): MDC = {

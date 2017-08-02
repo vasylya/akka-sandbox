@@ -8,7 +8,7 @@ import kamon.Kamon
 import scala.util.Try
 
 object Main extends App with MainModule {
-  Kamon.start()
+//  Kamon.start()
 
   lazy val config = ConfigFactory.load()
   implicit lazy val system = ActorSystem("sandbox-actor-system")
@@ -22,7 +22,7 @@ object Main extends App with MainModule {
 
   def terminate(): Unit = {
     Try(system.shutdown())
-    Try(Kamon.shutdown())
+//    Try(Kamon.shutdown())
   }
 
   sys.addShutdownHook {
