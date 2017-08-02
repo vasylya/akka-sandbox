@@ -4,10 +4,10 @@ import kamon.metric.{EntityRecorderFactory, GenericEntityRecorder}
 import kamon.metric.instrument.{InstrumentFactory, Time}
 
 class ActorMetrics(instrumentFactory: InstrumentFactory) extends GenericEntityRecorder(instrumentFactory) {
-  val timeInMailbox = histogram("time-in-mailbox", Time.Nanoseconds)
-  val processingTime = histogram("processing-time", Time.Nanoseconds)
-  val mailboxSize = minMaxCounter("mailbox-size")
-  val errors = counter("errors")
+  val timeInMailbox = histogram("custom-time-in-mailbox", Time.Nanoseconds)
+  val processingTime = histogram("custom-processing-time", Time.Nanoseconds)
+  val mailboxSize = minMaxCounter("custom-mailbox-size")
+  val errors = counter("custom-errors")
 }
 
 object ActorMetrics extends EntityRecorderFactory[ActorMetrics] {

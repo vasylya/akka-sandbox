@@ -22,11 +22,18 @@ class UserService(userRegion: UserRegion)(implicit executionContext: ExecutionCo
   private val random = new Random()
 
   def createUser(uuid: UUID): Future[String] = {
+    createUserCounter.increment()
+    createUserMMCounter.increment(20)
+    createUserHistogram.record(900L)
+    createUserTaggedHistogram.record(1800L)
     customManagedActorMetrics.mailboxSize.increment()
     customManagedActorMetrics.processingTime.record(random.nextInt(500))
     customManagedActorMetrics.mailboxSize.decrement()
-    val uniqueName = "andrzej" + random.nextInt(100)
-    (userRegion ? UserActor.CreateUser(uuid.toString, uniqueName)).mapTo[String]
+    val uniqueName = "unique_user_" + random.nextInt(100)
+    Tracer.currentContext
+      .withNewAsyncSegment("Future_Ask_CreateUser", "business-logic", "UserService") {
+        (userRegion ? UserActor.CreateUser(uuid.toString, uniqueName)).mapTo[String]
+      }
   }
 
   def getUser(uuid: UUID): Future[Option[String]] = {
@@ -38,7 +45,7 @@ class UserService(userRegion: UserRegion)(implicit executionContext: ExecutionCo
     customManagedActorMetrics.processingTime.record(random.nextInt(500))
     customManagedActorMetrics.mailboxSize.decrement()
     Tracer.currentContext
-      .withNewAsyncSegment("FUTURE_some-cool-section", "business-logic", "kamon") {
+      .withNewAsyncSegment("Future_Ask_GetUser", "business-logic", "UserService") {
         (userRegion ? UserActor.GetUser(uuid.toString))
       }
       .mapTo[Option[String]]
@@ -50,7 +57,9 @@ object UserService {
   val getUserMMCounter = Kamon.metrics.minMaxCounter("get-user-mm-counter", refreshInterval = 500 milliseconds)
   val getUserHistogram = Kamon.metrics.histogram("get-user-histogram")
   val getUserTaggedHistogram = Kamon.metrics.histogram("get-user-tagged-histogram", tags = Map("algorithm" -> "X"))
-  val customManagedActorMetrics = Kamon.metrics.entity(ActorMetrics, "my-managed-actor")
-
-  //shouldTrack(customManagedActorMetrics)
+  val createUserCounter = Kamon.metrics.counter("create-user-counter")
+  val createUserMMCounter = Kamon.metrics.minMaxCounter("create-user-mm-counter", refreshInterval = 500 milliseconds)
+  val createUserHistogram = Kamon.metrics.histogram("create-user-histogram")
+  val createUserTaggedHistogram = Kamon.metrics.histogram("create-user-tagged-histogram", tags = Map("algorithm" -> "X"))
+  val customManagedActorMetrics = Kamon.metrics.entity(ActorMetrics, "custom-managed-actor")
 }

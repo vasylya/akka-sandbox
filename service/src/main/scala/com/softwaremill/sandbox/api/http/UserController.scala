@@ -23,7 +23,7 @@ class UserController(userService: UserService)(implicit executionContext: Execut
           onSuccess(userService.createUser(uuid)) {
             case name: String =>
               logger.debug(s"creating user $uuid finished [token ${Tracer.currentContext.token}]")
-              Tracer.withNewContext("creating_user_autoFinish", autoFinish = true) {
+              Tracer.withNewContext("creating_user_autoFinish") {
                 complete(201, s"user $uuid created")
               }
           }
