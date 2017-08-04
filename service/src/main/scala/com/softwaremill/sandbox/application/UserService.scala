@@ -29,11 +29,12 @@ class UserService(userRegion: UserRegion)(implicit executionContext: ExecutionCo
     customManagedActorMetrics.mailboxSize.increment()
     customManagedActorMetrics.processingTime.record(random.nextInt(500))
     customManagedActorMetrics.mailboxSize.decrement()
+    contextTest
     val uniqueName = "unique_user_" + random.nextInt(100)
-    Tracer.currentContext
-      .withNewAsyncSegment("Future_Ask_CreateUser", "business-logic", "UserService") {
-        (userRegion ? UserActor.CreateUser(uuid.toString, uniqueName)).mapTo[String]
-      }
+    Tracer.currentContext.withNewAsyncSegment("Future_Ask_CreateUser", "business-logic", "UserService") {
+      (userRegion ? UserActor.CreateUser(uuid.toString, uniqueName)).mapTo[String]
+    }
+
   }
 
   def getUser(uuid: UUID): Future[Option[String]] = {
@@ -49,6 +50,38 @@ class UserService(userRegion: UserRegion)(implicit executionContext: ExecutionCo
         (userRegion ? UserActor.GetUser(uuid.toString))
       }
       .mapTo[Option[String]]
+  }
+
+  private def contextTest: Unit = {
+    Tracer.withNewContext("1_autoFinish_false") {
+      Thread.sleep(random.nextInt(100))
+      Tracer.currentContext.withNewSegment("test_segment", "autoFinish_false", "test") {
+        Thread.sleep(random.nextInt(200))
+      }
+    }
+    Tracer.withNewContext("2_autoFinish_true", autoFinish = true) {
+      Thread.sleep(random.nextInt(100))
+      Tracer.currentContext.withNewSegment("test_segment", "autoFinish_true", "test") {
+        Thread.sleep(random.nextInt(200))
+      }
+    }
+    Tracer.withNewContext("3_autoFinish_false_outer") {
+      Thread.sleep(random.nextInt(100))
+      Tracer.withNewContext("3_autoFinish_true_inner", autoFinish = true) {
+        Thread.sleep(random.nextInt(200))
+      }
+    }
+    Tracer.withNewContext("4_autoFinish_true_outer", autoFinish = true) {
+      Thread.sleep(random.nextInt(100))
+      Tracer.withNewContext("4_autoFinish_false_inner") {
+        Thread.sleep(random.nextInt(200))
+      }
+    }
+    Tracer.withNewContext("5_autoFinish_false_outer_rename") {
+      Thread.sleep(random.nextInt(100))
+      Tracer.currentContext.rename("5_autoFinish_false_renamed")
+      Thread.sleep(random.nextInt(200))
+    }
   }
 }
 

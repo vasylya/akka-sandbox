@@ -16,6 +16,7 @@ class UserController(userService: UserService)(implicit executionContext: Execut
   def routes: Route = pathPrefix("user") {
     pathEnd {
       post {
+        logger.debug(s"Tracer.currentContext.name = ${Tracer.currentContext.name}")
         traceName("user-creation") {
           val uuid = UUID.randomUUID()
           logger.debug(s"processing user $uuid creation request [token ${Tracer.currentContext.token}]")
@@ -33,14 +34,13 @@ class UserController(userService: UserService)(implicit executionContext: Execut
       pathPrefix(JavaUUID) { uuid =>
         pathEnd {
           get {
+            logger.debug(s"Tracer.currentContext.name = ${Tracer.currentContext.name}")
             traceName("get-user") {
               onSuccess(userService.getUser(uuid)) {
                 case Some(userName) =>
                   Tracer.withNewContext("get-user_with_autoFinish", autoFinish = true) {
                     logger.debug(s"getting user $uuid finished [token ${Tracer.currentContext.token}]")
-                    Tracer.withNewContext("get-user_without_autoFinish") {
-                      complete(200, s"user $uuid found, name is: $userName")
-                    }
+                    complete(200, s"user $uuid found, name is: $userName")
                   }
                 case None =>
                   logger.debug(s"user $uuid not found [token ${Tracer.currentContext.token}]")
