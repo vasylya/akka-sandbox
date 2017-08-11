@@ -10,7 +10,8 @@ import akka.http.scaladsl.model.HttpRequest
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.directives.{DebuggingDirectives, LogEntry, LoggingMagnet}
 import akka.stream.{ActorMaterializer, Materializer}
-import ch.megard.akka.http.cors.CorsDirectives
+//import ch.megard.akka.http.cors.CorsDirectives
+import ch.megard.akka.http.cors.scaladsl.CorsDirectives
 import com.softwaremill.macwire._
 import com.softwaremill.sandbox.api.http.{ApiConfig, UserController}
 import com.softwaremill.sandbox.application.UserActor.{UserRegion, UserRegionTag}

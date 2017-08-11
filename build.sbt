@@ -29,7 +29,7 @@ val aopMerge = new sbtassembly.MergeStrategy {
 lazy val commonSettings = Seq(
   organization := "com.softwaremill",
   version := "0.0.1-SNAPSHOT",
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.3",
   scalacOptions ++= Seq("-unchecked", "-deprecation"),
   test in assembly := {},
   assemblyMergeStrategy in assembly := {
@@ -55,19 +55,18 @@ lazy val sandbox = (project in file("."))
     }
   )
 
-val akkaVersion = "2.4.16"
+val akkaVersion = "2.5.3"
 val akkaHttpVersion = "10.0.3"
 lazy val akkaDependencies = Seq(
-  "com.typesafe.akka" %% "akka-persistence" % akkaVersion,
   "com.typesafe.akka" %% "akka-persistence" % akkaVersion,
   "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
   "com.typesafe.akka" %% "akka-http-core" % akkaHttpVersion,
   "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
   "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
   "com.typesafe.akka" %% "akka-cluster-sharding" % akkaVersion,
-  "de.heikoseeberger" %% "akka-http-circe" % "1.11.0",
-  "ch.megard" %% "akka-http-cors" % "0.1.10",
-  "com.github.dnvriend" %% "akka-persistence-inmemory" % "1.3.18" exclude ("org.scalatest", "scalatest")
+  "de.heikoseeberger" %% "akka-http-circe" % "1.12.0",
+  "ch.megard" %% "akka-http-cors" % "0.2.1",
+  "com.github.dnvriend" %% "akka-persistence-inmemory" % "2.5.1.1" exclude ("org.scalatest", "scalatest")
 )
 
 val circeVersion = "0.6.1"
@@ -93,16 +92,16 @@ lazy val loggerDependencies = Seq(
   "org.codehaus.janino" % "janino" % "2.6.1"
 )
 
-val kamonVersion = "0.6.6"
+val kamonVersion = "0.6.7"
 lazy val monitoringDependencies = Seq(
   "io.kamon" %% "kamon-core" % kamonVersion,
-  "io.kamon" %% "kamon-jmx" % kamonVersion,
+//  "io.kamon" %% "kamon-jmx" % kamonVersion,
   "io.kamon" %% "kamon-akka-2.4" % kamonVersion,
   "io.kamon" %% "kamon-autoweave" % "0.6.5",
   "io.kamon" %% "kamon-akka-remote-2.4" % kamonVersion,
-  "io.kamon" %% "kamon-akka-http" % kamonVersion,
+//  "io.kamon" %% "kamon-akka-http" % kamonVersion,
   "io.kamon" %% "kamon-scala" % kamonVersion,
-  "io.kamon" %% "kamon-datadog" % kamonVersion
+  "io.kamon" %% "kamon-statsd" % kamonVersion
 )
 
 lazy val testDependencies = Seq(
@@ -147,5 +146,5 @@ lazy val perfTest = (project in file("perf-test"))
     )
   )
 
-scalafmtConfig in ThisBuild := Some(file(".scalafmt.conf"))
-onLoad in Global := (Command.process("scalafmt", _: State)) compose (onLoad in Global).value
+//scalafmtConfig in ThisBuild := Some(file(".scalafmt.conf"))
+//onLoad in Global := (Command.process("scalafmt", _: State)) compose (onLoad in Global).value

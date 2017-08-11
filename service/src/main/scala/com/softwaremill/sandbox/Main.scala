@@ -21,7 +21,7 @@ object Main extends App with MainModule {
   }
 
   def terminate(): Unit = {
-    Try(system.shutdown())
+    Try(system.terminate())
     Try(Kamon.shutdown())
   }
 

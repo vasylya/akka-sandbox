@@ -7,12 +7,14 @@ import akka.http.scaladsl.server.Route
 import com.softwaremill.sandbox.application.UserService
 import com.typesafe.scalalogging.LazyLogging
 import kamon.Kamon
-import kamon.akka.http.KamonTraceDirectives
+//import kamon.akka.http.KamonTraceDirectives
 import kamon.trace.Tracer
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UserController(userService: UserService)(implicit executionContext: ExecutionContext) extends KamonTraceDirectives with LazyLogging {
+class UserController(userService: UserService)(implicit executionContext: ExecutionContext)
+    extends //KamonTraceDirectives with
+    LazyLogging {
 
   import UserController._
 
@@ -21,7 +23,8 @@ class UserController(userService: UserService)(implicit executionContext: Execut
       post {
         logger.debug(s"Tracer.currentContext.name = ${Tracer.currentContext.name}")
         val time = System.currentTimeMillis()
-        val res = traceName("user-creation") {
+        val res = //traceName("user-creation")
+        {
           val uuid = UUID.randomUUID()
           logger.debug(s"processing user $uuid creation request [token ${Tracer.currentContext.token}]")
           Tracer.currentContext.withNewSegment("create-user_NO_async_segment", "create-user", "request") {
@@ -48,7 +51,8 @@ class UserController(userService: UserService)(implicit executionContext: Execut
           get {
             logger.debug(s"Tracer.currentContext.name = ${Tracer.currentContext.name}")
             val time = System.currentTimeMillis()
-            val res = traceName("get-user") {
+            val res = //traceName("get-user")
+            {
               Tracer.currentContext.withNewSegment("get-user_NO_async_segment", "get-user", "request") {
                 Thread.sleep(1000)
                 Tracer.currentContext.withNewAsyncSegment("get-user_async_segment", "get-user", "request") {
