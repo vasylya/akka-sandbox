@@ -17,7 +17,7 @@ function runApp {
 
     APP_OPTS=" -Xmx512M -Dapi.host=$host_ip -Dakka.cluster.seed-nodes.0=$seed_node -Dapp.user-creation-lag=$user_creation_lag"
 #    RUN=" -javaagent:aspectjweaver-1.8.10.jar $APP_OPTS -jar service/target/scala-2.11/sandbox-service-assembly-0.0.1-SNAPSHOT.jar"
-    RUN=" $APP_OPTS -jar service/target/scala-2.11/sandbox-service-assembly-0.0.1-SNAPSHOT.jar"
+    RUN=" $APP_OPTS -jar service/target/scala-2.12/sandbox-service-assembly-0.0.1-SNAPSHOT.jar"
     echo "Running $RUN"
     rm -f ~/nohup.out
     nohup java $RUN > ~/nohup.out 2>&1&
